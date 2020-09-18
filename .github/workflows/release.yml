@@ -41,7 +41,7 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
       -
         name: 'Prepare variables'
-        run:  |
+        run:
           BUGFIX_BRANCH=${{ github.event.inputs.version }}
           BUGFIX_BRANCH=${BUGFIX_BRANCH%.*}.x
           echo "::set-env name=BUGFIX_BRANCH::${BUGFIX_BRANCH}"
@@ -51,13 +51,13 @@ jobs:
             echo "::set-env name=RELEASE_BRANCH::${BUGFIX_BRANCH}"
       -
         name: 'Prepare release branch for major release'
-        run:  |
+        run:
           git checkout -b ${BUGFIX_BRANCH}
           npm --no-git-tag-version version ${{ github.event.inputs.version }}
         if: env.RELEASE_BRANCH == env.DEFAULT_BRANCH
       -
         name: 'Prepare release branch for minor release'
-        run:  |
+        run:
           git checkout ${BUGFIX_BRANCH}
           npm --no-git-tag-version version ${{ github.event.inputs.version }}
         if: env.RELEASE_BRANCH != env.DEFAULT_BRANCH
