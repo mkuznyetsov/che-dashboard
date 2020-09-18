@@ -53,12 +53,27 @@ jobs:
       -
         name: 'Prepare release branch for major release'
         run:  |
+          cd ${GITHUB_WORKSPACE}/${DIR_DASHBOARD}
           git checkout -b ${BUGFIX_BRANCH}
+          git checkout -b release-${{ github.event.inputs.version }}
           npm --no-git-tag-version version ${{ github.event.inputs.version }}
+          git commit -asm "Release version ${{ github.event.inputs.version }}"
+          if [ $(git tag -l ${{ github.event.inputs.version }}) ]; then
+            echo "tag ${{ github.event.inputs.version }} already exists! recreating ..."
+            git tag -d ${{ github.event.inputs.version }}
+            git push origin :${{ github.event.inputs.version }}
+            git tag "${{ github.event.inputs.version }}"
+          else
+            echo "[INFO] creating new tag ${{ github.event.inputs.version }}"
+            git tag "${{ github.event.inputs.version }}"
+          fi
+          git push --tags
+          echo "[INFO] tag created and pushed for che-dashboard"
         if: env.RELEASE_BRANCH == env.DEFAULT_BRANCH
       -
         name: 'Prepare release branch for minor release'
         run:  |
+          cd ${GITHUB_WORKSPACE}/${DIR_DASHBOARD}
           git checkout ${BUGFIX_BRANCH}
           npm --no-git-tag-version version ${{ github.event.inputs.version }}
         if: env.RELEASE_BRANCH != env.DEFAULT_BRANCH
