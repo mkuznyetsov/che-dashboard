@@ -54,13 +54,13 @@ jobs:
         run:  |
           git checkout -b ${BUGFIX_BRANCH}
           npm --no-git-tag-version version ${{ github.event.inputs.version }}
-        if: ${RELEASE_BRANCH} = ${DEFAULT_BRANCH}
+        if: env.RELEASE_BRANCH == env.DEFAULT_BRANCH
       -
         name: 'Prepare release branch for minor release'
         run:  |
           git checkout ${BUGFIX_BRANCH}
           npm --no-git-tag-version version ${{ github.event.inputs.version }}
-        if: ${RELEASE_BRANCH} != ${DEFAULT_BRANCH}
+        if: env.RELEASE_BRANCH != env.DEFAULT_BRANCH
       -
         name: 'Cache Docker layers'
         uses: actions/cache@v2
