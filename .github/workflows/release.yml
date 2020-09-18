@@ -45,7 +45,7 @@ jobs:
           BUGFIX_BRANCH=${{ github.event.inputs.version }}
           BUGFIX_BRANCH=${BUGFIX_BRANCH%.*}.x
           echo "::set-env name=BUGFIX_BRANCH::${BUGFIX_BRANCH}"
-          if [[ ${{ github.event.inputs.version }} = *".0"]]; then
+          if [[ "${{ github.event.inputs.version }}" = *".0" ]]; then
             echo "::set-env name=RELEASE_BRANCH::master"
           else
             echo "::set-env name=RELEASE_BRANCH::${BUGFIX_BRANCH}"
