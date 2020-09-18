@@ -49,6 +49,7 @@ jobs:
             echo "::set-env name=RELEASE_BRANCH::master"
           else
             echo "::set-env name=RELEASE_BRANCH::${BUGFIX_BRANCH}"
+          fi
       -
         name: 'Prepare release branch for major release'
         run:  |
