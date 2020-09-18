@@ -21,7 +21,7 @@ env:
   DIR_DASHBOARD: che-dashboard
   DIR_CHE: che
   DEFAULT_BRANCH: master
-  ORGANIZATION: docker.io/mkuznyetsov
+  ORGANIZATION: quay.io/mkuznets
 
 jobs:
 
@@ -53,13 +53,14 @@ jobs:
       -
         name: 'Prepare release branch for major release'
         run:  |
-          cd ${GITHUB_WORKSPACE}/${DIR_DASHBOARD}
-          git checkout -b ${BUGFIX_BRANCH}
-          git checkout -b release-${{ github.event.inputs.version }}
-          npm --no-git-tag-version version ${{ github.event.inputs.version }}
-
           git config --global user.name "Mykhailo Kuznietsov"
           git config --global user.email "mkuznets@redhat.com"
+
+          cd ${GITHUB_WORKSPACE}/${DIR_DASHBOARD}
+          git checkout -b ${BUGFIX_BRANCH}
+          git push origin ${BUGFIX_BRANCH}
+          git checkout -b release-${{ github.event.inputs.version }}
+          npm --no-git-tag-version version ${{ github.event.inputs.version }}
 
           git commit -asm "Release version ${{ github.event.inputs.version }}"
           if [ $(git tag -l ${{ github.event.inputs.version }}) ]; then
@@ -98,13 +99,9 @@ jobs:
         run: |
           echo "::set-env name=IMAGE_DASHBOARD::${ORGANIZATION}/che-dashboard:${{ github.event.inputs.version }}"
       -
-        name: 'create tags'
-        run: |
-          echo "::set-env name=IMAGE_DASHBOARD::${ORGANIZATION}/che-dashboard:${{ github.event.inputs.version }}"
-      -
         name: 'Docker docker.io Login'
         run: |
-          docker login -u "${{ secrets.QUAY_USERNAME }}" -p "${{ secrets.QUAY_PASSWORD }}" docker.io
+          docker login -u "${{ secrets.QUAY_USERNAME }}" -p "${{ secrets.QUAY_PASSWORD }}" quay.io
       -
         name: 'Docker Buildx (build)'
         id: che-dashboard-docker-build
