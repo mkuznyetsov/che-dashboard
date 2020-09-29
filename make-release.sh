@@ -57,7 +57,7 @@ npm --no-git-tag-version version ${VERSION}
 # commit change into branch
 if [[ ${NOCOMMIT} -eq 0 ]]; then
   COMMIT_MSG="[release] Bump to ${VERSION} in ${BRANCH}"
-  git commit -s -m "${COMMIT_MSG}" VERSION
+  git commit -asm "${COMMIT_MSG}"
   git pull origin "${BRANCH}"
   git push origin "${BRANCH}"
 fi
@@ -67,6 +67,7 @@ if [[ $TRIGGER_RELEASE -eq 1 ]]; then
   git fetch origin "${BRANCH}:${BRANCH}"
   git checkout "${BRANCH}"
   docker build -t "quay/mkuznets/che-dashboard:${VERSION}" -f apache.Dockerfile .
+  docker push "quay/mkuznets/che-dashboard:${VERSION}"
 
   # tag the release
   git checkout "${BRANCH}"
