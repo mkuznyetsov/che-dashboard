@@ -66,8 +66,8 @@ if [[ $TRIGGER_RELEASE -eq 1 ]]; then
   # push new branch to release branch to trigger CI build
   git fetch origin "${BRANCH}:${BRANCH}"
   git checkout "${BRANCH}"
-  docker build -t "quay/mkuznets/che-dashboard:${VERSION}" -f apache.Dockerfile .
-  docker push "quay/mkuznets/che-dashboard:${VERSION}"
+  docker build -t "quay.io/mkuznets/che-dashboard:${VERSION}" -f apache.Dockerfile .
+  docker push "quay.io/mkuznets/che-dashboard:${VERSION}"
 
   # tag the release
   git checkout "${BRANCH}"
@@ -114,8 +114,3 @@ if [[ ${NOCOMMIT} -eq 0 ]]; then
 ${lastCommitComment}" -b "${BRANCH}" -h "${PR_BRANCH}"
   fi 
 fi
-
-popd > /dev/null || exit
-
-# cleanup tmp dir
-cd /tmp && rm -fr "$TMP"
