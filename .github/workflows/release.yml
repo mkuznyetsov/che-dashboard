@@ -1,7 +1,4 @@
-# This is a basic workflow that is manually triggered
-
-name: Manual workflow
-
+name: Release Che Dashboard
 # Controls when the action will run. Workflow runs when manually triggered using the UI
 # or API.
 
@@ -16,103 +13,16 @@ on:
         default: '7.x.y'
         # Input has to be provided for the workflow to run
         required: true
-
-env:
-  DIR_DASHBOARD: che-dashboard
-  DIR_CHE: che
-  DEFAULT_BRANCH: master
-  ORGANIZATION: quay.io/mkuznets
-
 jobs:
-
-  che-dashboard-build:
-    runs-on: ubuntu-18.04
-    strategy:
-      fail-fast: false
+  build:
+    name: Create Release
+    runs-on: ubuntu-latest
     steps:
-      -
-        name: 'Docker Buildx'
-        uses: crazy-max/ghaction-docker-buildx@v3
-      -
-        name: 'Checkout Source Code'
+      - name: Checkout code
         uses: actions/checkout@v2
-        with:
-          path: ${{ env.DIR_DASHBOARD }}
-          ref: ${{ github.event.pull_request.head.sha }}
-      -
-        name: 'Prepare variables'
-        run:  |
-          BUGFIX_BRANCH=${{ github.event.inputs.version }}
-          BUGFIX_BRANCH=${BUGFIX_BRANCH%.*}.x
-          echo "::set-env name=BUGFIX_BRANCH::${BUGFIX_BRANCH}"
-          if [[ "${{ github.event.inputs.version }}" = *".0" ]]; then
-            echo "::set-env name=RELEASE_BRANCH::master"
-          else
-            echo "::set-env name=RELEASE_BRANCH::${BUGFIX_BRANCH}"
-          fi
-      -
-        name: 'Prepare release branch for major release'
-        run:  |
+      - name: Create Release
+        run: |
           git config --global user.name "Mykhailo Kuznietsov"
           git config --global user.email "mkuznets@redhat.com"
-
-          cd ${GITHUB_WORKSPACE}/${DIR_DASHBOARD}
-          git checkout -b ${BUGFIX_BRANCH}
-          git push origin ${BUGFIX_BRANCH}
-          git checkout -b release-${{ github.event.inputs.version }}
-          npm --no-git-tag-version version ${{ github.event.inputs.version }}
-
-          git commit -asm "Release version ${{ github.event.inputs.version }}"
-          if [ $(git tag -l ${{ github.event.inputs.version }}) ]; then
-            echo "tag ${{ github.event.inputs.version }} already exists! recreating ..."
-            git tag -d ${{ github.event.inputs.version }}
-            git push origin :${{ github.event.inputs.version }}
-            git tag "${{ github.event.inputs.version }}"
-          else
-            echo "[INFO] creating new tag ${{ github.event.inputs.version }}"
-            git tag "${{ github.event.inputs.version }}"
-          fi
-          git push --tags
-          echo "[INFO] tag created and pushed for che-dashboard"
-        if: env.RELEASE_BRANCH == env.DEFAULT_BRANCH
-      -
-        name: 'Prepare release branch for minor release'
-        run:  |
-          cd ${GITHUB_WORKSPACE}/${DIR_DASHBOARD}
-          git checkout ${BUGFIX_BRANCH}
-          npm --no-git-tag-version version ${{ github.event.inputs.version }}
-        if: env.RELEASE_BRANCH != env.DEFAULT_BRANCH
-      -
-        name: 'Cache Docker layers'
-        uses: actions/cache@v2
-        id: cache
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-
-      -
-        name: 'Docker Prepare'
-        run: docker image prune -a -f
-      -
-        name: 'Prepare Image Name'
-        run: |
-          echo "::set-env name=IMAGE_DASHBOARD::${ORGANIZATION}/che-dashboard:${{ github.event.inputs.version }}"
-      -
-        name: 'Docker docker.io Login'
-        run: |
-          docker login -u "${{ secrets.QUAY_USERNAME }}" -p "${{ secrets.QUAY_PASSWORD }}" quay.io
-      -
-        name: 'Docker Buildx (build)'
-        id: che-dashboard-docker-build
-        uses: nick-invision/retry@v1
-        with:
-          timeout_minutes: 100
-          max_attempts: 5
-          retry_wait_seconds: 60
-          command: |
-            cd ${GITHUB_WORKSPACE}/${DIR_DASHBOARD} && docker buildx build --cache-from "type=local,src=/tmp/.buildx-cache" --cache-to "type=local,dest=/tmp/.buildx-cache" --platform linux/amd64,linux/s390x --push --tag ${IMAGE_DASHBOARD} --file apache.Dockerfile .
-      -
-        name: 'Docker Logout'
-        run: |
-          docker logout
+          export GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
+          /bin/bash make-release.sh make-release.sh --repo git@github.com:mkuznyetsov/che-dashboard --version ${{ github.event.inputs.version }} --trigger-release
