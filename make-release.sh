@@ -38,13 +38,8 @@ else
   BASEBRANCH="${BRANCH}"
 fi
 
-# work in tmp dir
-TMP=$(mktemp -d); pushd "$TMP" > /dev/null || exit 1
-
 # get sources from ${BASEBRANCH} branch
 echo "Check out ${REPO} to ${TMP}/${REPO##*/}"
-git clone "${REPO}" -q
-cd "${REPO##*/}" || exit 1
 git fetch origin "${BASEBRANCH}":"${BASEBRANCH}"
 git checkout "${BASEBRANCH}"
 
@@ -71,7 +66,7 @@ if [[ $TRIGGER_RELEASE -eq 1 ]]; then
   # push new branch to release branch to trigger CI build
   git fetch origin "${BRANCH}:${BRANCH}"
   git checkout "${BRANCH}"
-  docker build -t quay/mkuznets/che-dashboard -f apache.Dockerfile .
+  docker build -t "quay/mkuznets/che-dashboard:${VERSION}" -f apache.Dockerfile .
 
   # tag the release
   git checkout "${BRANCH}"
