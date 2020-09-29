@@ -91,7 +91,7 @@ else
 fi
 
 # change VERSION file
-npm --no-git-tag-version version ${{ github.event.inputs.version }}
+npm --no-git-tag-version version ${NEXTVERSION}
 
 if [[ ${NOCOMMIT} -eq 0 ]]; then
   BRANCH=${BASEBRANCH}
