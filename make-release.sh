@@ -97,7 +97,7 @@ if [[ ${NOCOMMIT} -eq 0 ]]; then
   BRANCH=${BASEBRANCH}
   # commit change into branch
   COMMIT_MSG="[release] Bump to ${NEXTVERSION} in ${BRANCH}"
-  git commit -s -m "${COMMIT_MSG}" VERSION
+  git commit -asm "${COMMIT_MSG}"
   git pull origin "${BRANCH}"
 
   PUSH_TRY="$(git push origin "${BRANCH}")"
