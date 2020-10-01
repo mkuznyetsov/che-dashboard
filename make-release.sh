@@ -100,10 +100,10 @@ if [[ ${NOCOMMIT} -eq 0 ]]; then
   git commit -asm "${COMMIT_MSG}"
   git pull origin "${BRANCH}"
 
-  PUSH_TRY="$(git push origin "${BRANCH}")"
+ # PUSH_TRY="$(git push origin "${BRANCH}")"
   # shellcheck disable=SC2181
-  if [[ $? -gt 0 ]] || [[ $PUSH_TRY == *"protected branch hook declined"* ]]; then
-  PR_BRANCH=pr-master-to-${NEXTVERSION}
+ # if [[ $? -gt 0 ]] || [[ $PUSH_TRY == *"protected branch hook declined"* ]]; then
+ # PR_BRANCH=pr-master-to-${NEXTVERSION}
     # create pull request for master branch, as branch is restricted
     git branch "${PR_BRANCH}"
     git checkout "${PR_BRANCH}"
@@ -112,5 +112,5 @@ if [[ ${NOCOMMIT} -eq 0 ]]; then
     lastCommitComment="$(git log -1 --pretty=%B)"
     hub pull-request -o -f -m "${lastCommitComment}
 ${lastCommitComment}" -b "${BRANCH}" -h "${PR_BRANCH}"
-  fi 
+  # fi 
 fi
