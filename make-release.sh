@@ -91,7 +91,7 @@ function update_pkgs_versions() {
   sed_in_place -e "s/@eclipse-che\/dashboard-frontend@.*\`/@eclipse-che\/dashboard-frontend@${VER}\`/" .deps/EXCLUDED/prod.md
   sed_in_place -e "s/@eclipse-che\/common@.*\`/@eclipse-che\/common@${VER}\`/" .deps/EXCLUDED/prod.md
   # we don't have all deps resolved. So, do no fail in case of failure
-  # yarn license:generate || true
+  yarn license:generate || true
 }
 
 usage ()
