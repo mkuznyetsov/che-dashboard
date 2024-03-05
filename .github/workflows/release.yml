@@ -24,7 +24,7 @@ on:
         default: 'false'
 
 env:
-  IMAGE: quay.io/eclipse/che-dashboard
+  IMAGE: quay.io/mkuznets/che-dashboard
 
 jobs:
 
