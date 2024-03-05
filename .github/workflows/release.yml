@@ -85,7 +85,7 @@ jobs:
 
   build-images:
     runs-on: ubuntu-22.04
-    needs: create-manifest
+    needs: tag-release
     strategy:
       fail-fast: false
       matrix:
