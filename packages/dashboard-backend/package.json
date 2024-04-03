@@ -26,8 +26,9 @@
   ],
   "license": "EPL-2.0",
   "dependencies": {
-    "@eclipse-che/che-devworkspace-generator": "7.85.0-next-1427c19",
+    "@eclipse-che/che-devworkspace-generator": "7.79.0-next-1427c19",
     "@fastify/cors": "^8.3.0",
+    "dhtmlx-gantt": "8.0.6",
     "@fastify/error": "^3.3.0",
     "@fastify/http-proxy": "^9.2.1",
     "@fastify/oauth2": "^7.2.2",
