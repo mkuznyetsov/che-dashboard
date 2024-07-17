@@ -45,16 +45,16 @@ RUN yarn add slnodejs -W
 RUN yarn slnodejs config --token ${SL_TOKEN} --appname "che-dashboard" --branch "main" --build "7.89.0-next.0"
 
 ENV NODE_DEBUG=sl
-RUN yarn slnodejs scan --token ${SL_TOKEN} --buildsessionidfile buildSessionId --instrumentForBrowsers --workspacepath /dashboard/${FRONTEND}/lib/public --outputpath /dashboard/${FRONTEND}/lib/sl_public --scm none --uniqueModuleId frontend-package
-RUN yarn slnodejs scan --token ${SL_TOKEN} --buildsessionidfile buildSessionId --workspacepath /dashboard/${BACKEND}/lib  --scm none --uniqueModuleId backend-package
-RUN yarn slnodejs scan --token ${SL_TOKEN} --buildsessionidfile buildSessionId --workspacepath /dashboard/${COMMON}/   --scm none --uniqueModuleId common-package
+RUN yarn slnodejs scan --token ${SL_TOKEN} --buildsessionidfile buildSessionId --instrumentForBrowsers --workspacepath /dashboard/${FRONTEND}/lib/public --outputpath /dashboard/${FRONTEND}/lib/sl_public --scm git --uniqueModuleId frontend-package
+RUN yarn slnodejs scan --token ${SL_TOKEN} --buildsessionidfile buildSessionId --workspacepath /dashboard/${BACKEND}/lib  --scm git --uniqueModuleId backend-package
+RUN yarn slnodejs scan --token ${SL_TOKEN} --buildsessionidfile buildSessionId --workspacepath /dashboard/${COMMON}/   --scm git --uniqueModuleId common-package
 RUN yarn slnodejs buildend --token ${SL_TOKEN} --buildsessionidfile buildSessionId --ok
 
-# RUN yarn slnodejs dryRun --verbose --instrumentForBrowsers --workspacepath /dashboard/${FRONTEND}/lib/public --scm none
+# RUN yarn slnodejs dryRun --verbose --instrumentForBrowsers --workspacepath /dashboard/${FRONTEND}/lib/public --scm git
 # RUN mv sl-dry-run-output sl-dryrun-frontend
-# RUN yarn slnodejs dryRun --verbose --instrumentForBrowsers --workspacepath /dashboard/${BACKEND}/lib --scm none
+# RUN yarn slnodejs dryRun --verbose --instrumentForBrowsers --workspacepath /dashboard/${BACKEND}/lib --scm git
 # RUN mv sl-dry-run-output sl-dryrun-backend
-# RUN yarn slnodejs dryRun --verbose --instrumentForBrowsers --workspacepath dashboard/${COMMON}/ --scm none
+# RUN yarn slnodejs dryRun --verbose --instrumentForBrowsers --workspacepath dashboard/${COMMON}/ --scm git
 # RUN mv sl-dry-run-output sl-dryrun-common
 
 
