@@ -60,7 +60,8 @@ jobs:
           push: true
           provenance: false
           tags: ${{ env.IMAGE }}:${{ matrix.arch }}-next
-      -
+          build-args: |
+            SL_TOKEN=${{ secrets.SL_TOKEN }}
         id: result
         name: "Build result outputs version"
         if: ${{ success() }}
