@@ -92,7 +92,7 @@ const config = {
     splitChunks: false,
     chunkIds: 'named',
   },
-  devtool: 'eval-cheap-module-source-map',
+  devtool: 'source-map',
   watchOptions: {
     aggregateTimeout: 1000,
     ignored: /node_modules/,

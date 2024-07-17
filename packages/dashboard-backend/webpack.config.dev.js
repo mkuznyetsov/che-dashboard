@@ -20,7 +20,7 @@ const common = require('./webpack.config.common');
 
 const config = {
     mode: 'development',
-    devtool: 'eval-source-map',
+    devtool: 'source-map',
     watchOptions: {
       ignored: /node_modules/,
       poll: 1000,
