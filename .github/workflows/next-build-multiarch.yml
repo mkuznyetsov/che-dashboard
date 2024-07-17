@@ -62,7 +62,7 @@ jobs:
           tags: ${{ env.IMAGE }}:${{ matrix.arch }}-sealights
           build-args: |
             SL_TOKEN=${{ secrets.SL_TOKEN }}
-            SL_BUILD_NAME=${{ github.sha }}
+            SL_BUILD_NAME=${GITHUB_SHA:0:7}-${{ matrix.arch }}
       -
         id: result
         name: "Build result outputs version"

@@ -42,23 +42,23 @@ RUN yarn install --network-timeout 3600000
 COPY packages/ /dashboard/packages
 RUN yarn build:dev
 
-#perform sealights scanning
+# enable sealights agent to scan the project sources, and inject the code with
 
-RUN yarn add slnodejs -W
-RUN yarn slnodejs config --token ${SL_TOKEN} --appname "che-dashboard" --branch "main" --build ${SL_BUILD_NAME}
+ENV NODE_DEBUG=s1
 
-ENV NODE_DEBUG=sl
-RUN yarn slnodejs scan --token ${SL_TOKEN} --buildsessionidfile buildSessionId --instrumentForBrowsers --workspacepath /dashboard/${FRONTEND}/lib/public --outputpath /dashboard/${FRONTEND}/lib/sl_public --scm none --uniqueModuleId frontend-package
-RUN yarn slnodejs scan --token ${SL_TOKEN} --buildsessionidfile buildSessionId --workspacepath /dashboard/${BACKEND}/lib  --scm none --uniqueModuleId backend-package
-RUN yarn slnodejs scan --token ${SL_TOKEN} --buildsessionidfile buildSessionId --workspacepath /dashboard/${COMMON}/   --scm none --uniqueModuleId common-package
-RUN yarn slnodejs buildend --token ${SL_TOKEN} --buildsessionidfile buildSessionId --ok
+RUN yarn add slnodejs -W && \
+    yarn slnodejs config --token ${SL_TOKEN} --appname "che-dashboard" --branch "main" --build "${SL_BUILD_NAME}-2" && \
+    yarn slnodejs scan --token ${SL_TOKEN} --buildsessionidfile buildSessionId --instrumentForBrowsers --workspacepath /dashboard/${FRONTEND}/lib --outputpath /dashboard/${FRONTEND}/sl_lib --scm none --uniqueModuleId frontend-package && \
+    yarn slnodejs scan --token ${SL_TOKEN} --buildsessionidfile buildSessionId --workspacepath /dashboard/${BACKEND}/lib --outputpath /dashboard/${BACKEND}/sl_lib --scm none --uniqueModuleId backend-package && \
+    yarn slnodejs scan --token ${SL_TOKEN} --buildsessionidfile buildSessionId --workspacepath /dashboard/${COMMON}/lib --outputpath /dashboard/${COMMON}/sl_lib --scm none --uniqueModuleId common-package && \
+    yarn slnodejs buildend --token ${SL_TOKEN} --buildsessionidfile buildSessionId --ok
 
-# RUN yarn slnodejs dryRun --verbose --instrumentForBrowsers --workspacepath /dashboard/${FRONTEND}/lib/public --scm none
-# RUN mv sl-dry-run-output sl-dryrun-frontend
-# RUN yarn slnodejs dryRun --verbose --instrumentForBrowsers --workspacepath /dashboard/${BACKEND}/lib --scm none
-# RUN mv sl-dry-run-output sl-dryrun-backend
-# RUN yarn slnodejs dryRun --verbose --instrumentForBrowsers --workspacepath dashboard/${COMMON}/ --scm none
-# RUN mv sl-dry-run-output sl-dryrun-common
+RUN mv /dashboard/${FRONTEND}/lib /dashboard/${FRONTEND}/lib_original && \
+    mv /dashboard/${BACKEND}/lib /dashboard/${BACKEND}/lib_original && \
+    mv /dashboard/${COMMON}/lib /dashboard/${COMMON}/lib_original && \
+    mv /dashboard/${FRONTEND}/sl_lib /dashboard/${FRONTEND}/lib && \
+    mv /dashboard/${BACKEND}/sl_lib /dashboard/${BACKEND}/lib && \
+    mv /dashboard/${COMMON}/sl_lib /dashboard/${COMMON}/lib && \
 
 
 # leave only production dependencies
