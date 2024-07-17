@@ -59,13 +59,14 @@ jobs:
           platforms: linux/${{ matrix.arch }}
           push: true
           provenance: false
-          tags: ${{ env.IMAGE }}:${{ matrix.arch }}-next
+          tags: ${{ env.IMAGE }}:${{ matrix.arch }}-sealights
           build-args: |
             SL_TOKEN=${{ secrets.SL_TOKEN }}
+      -
         id: result
         name: "Build result outputs version"
         if: ${{ success() }}
-        run: echo "${{ matrix.arch }}=${{ matrix.arch }}-next" >> $GITHUB_OUTPUT
+        run: echo "${{ matrix.arch }}=${{ matrix.arch }}-sealights" >> $GITHUB_OUTPUT
 
   create-manifest:
     if: always()
@@ -95,5 +96,5 @@ jobs:
             echo "[!] The job 'build-images' didn't provide any outputs. Can't create the manifest list."
             exit 1;
           fi
-          docker manifest create ${{ env.IMAGE }}:next $AMEND
-          docker manifest push ${{ env.IMAGE }}:next
+          docker manifest create ${{ env.IMAGE }}:sealights $AMEND
+          docker manifest push ${{ env.IMAGE }}:sealights
