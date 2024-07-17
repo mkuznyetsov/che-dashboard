@@ -12,6 +12,9 @@ FROM docker.io/node:18.19.1-alpine3.19 as builder
 ARG SL_TOKEN=''
 ENV SL_TOKEN=$SL_TOKEN
 
+ARG SL_BUILD_NAME=''
+ENV SL_BUILD_NAME=$SL_BUILD_NAME
+
 # hadolint ignore=DL3018
 RUN apk add --no-cache python3 make g++
 
@@ -42,7 +45,7 @@ RUN yarn build:dev
 #perform sealights scanning
 
 RUN yarn add slnodejs -W
-RUN yarn slnodejs config --token ${SL_TOKEN} --appname "che-dashboard" --branch "main" --build "7.89.0-next.0"
+RUN yarn slnodejs config --token ${SL_TOKEN} --appname "che-dashboard" --branch "main" --build ${SL_BUILD_NAME}
 
 ENV NODE_DEBUG=sl
 RUN yarn slnodejs scan --token ${SL_TOKEN} --buildsessionidfile buildSessionId --instrumentForBrowsers --workspacepath /dashboard/${FRONTEND}/lib/public --outputpath /dashboard/${FRONTEND}/lib/sl_public --scm git --uniqueModuleId frontend-package
