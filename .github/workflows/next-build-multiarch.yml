@@ -38,6 +38,10 @@ jobs:
         name: "Checkout Che Dashboard source code"
         uses: actions/checkout@v4
       -
+        name: "Set environment variables"
+        run: |
+          echo "SHORT_SHA=$(git rev-parse --short ${{ github.sha }})" >> $GITHUB_ENV
+      -
         name: "Set up QEMU"
         uses: docker/setup-qemu-action@v3
       -
@@ -62,7 +66,7 @@ jobs:
           tags: ${{ env.IMAGE }}:${{ matrix.arch }}-sealights
           build-args: |
             SL_TOKEN=${{ secrets.SL_TOKEN }}
-            SL_BUILD_NAME=${GITHUB_SHA:0:7}-${{ matrix.arch }}
+            SL_BUILD_NAME=${{ env.SHORT_SHA }}-${{ matrix.arch }}
       -
         id: result
         name: "Build result outputs version"

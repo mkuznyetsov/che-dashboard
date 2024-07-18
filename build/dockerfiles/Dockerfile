@@ -54,12 +54,7 @@ RUN yarn add slnodejs -W && \
     yarn slnodejs buildend --token ${SL_TOKEN} --buildsessionidfile buildSessionId --ok
 
 RUN mv /dashboard/${FRONTEND}/lib /dashboard/${FRONTEND}/lib_original && \
-    mv /dashboard/${BACKEND}/lib /dashboard/${BACKEND}/lib_original && \
-    mv /dashboard/${COMMON}/lib /dashboard/${COMMON}/lib_original && \
-    mv /dashboard/${FRONTEND}/sl_lib /dashboard/${FRONTEND}/lib && \
-    mv /dashboard/${BACKEND}/sl_lib /dashboard/${BACKEND}/lib && \
-    mv /dashboard/${COMMON}/sl_lib /dashboard/${COMMON}/lib && \
-
+    mv /dashboard/${FRONTEND}/sl_lib /dashboard/${FRONTEND}/lib
 
 # leave only production dependencies
 RUN yarn workspace @eclipse-che/dashboard-backend install --production
