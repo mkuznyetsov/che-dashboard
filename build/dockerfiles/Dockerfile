@@ -15,6 +15,9 @@ ENV SL_TOKEN=$SL_TOKEN
 ARG SL_BUILD_NAME=''
 ENV SL_BUILD_NAME=$SL_BUILD_NAME
 
+ARG SL_BUILD_ID=''
+ENV SL_BUILD_ID=$SL_BUILD_ID
+
 # hadolint ignore=DL3018
 RUN apk add --no-cache python3 make g++
 
@@ -47,7 +50,7 @@ RUN yarn build:dev
 ENV NODE_DEBUG=s1
 
 RUN yarn add slnodejs -W && \
-    yarn slnodejs config --token ${SL_TOKEN} --appname "che-dashboard" --branch "main" --build "${SL_BUILD_NAME}-2" && \
+    yarn slnodejs config --token ${SL_TOKEN} --appname ${SL_BUILD_NAME} --branch "main" --build ${SL_BUILD_ID} && \
     yarn slnodejs scan --token ${SL_TOKEN} --buildsessionidfile buildSessionId --instrumentForBrowsers --workspacepath /dashboard/${FRONTEND}/lib --outputpath /dashboard/${FRONTEND}/sl_lib --scm none --uniqueModuleId frontend-package && \
     yarn slnodejs scan --token ${SL_TOKEN} --buildsessionidfile buildSessionId --workspacepath /dashboard/${BACKEND}/lib --outputpath /dashboard/${BACKEND}/sl_lib --scm none --uniqueModuleId backend-package && \
     yarn slnodejs scan --token ${SL_TOKEN} --buildsessionidfile buildSessionId --workspacepath /dashboard/${COMMON}/lib --outputpath /dashboard/${COMMON}/sl_lib --scm none --uniqueModuleId common-package && \

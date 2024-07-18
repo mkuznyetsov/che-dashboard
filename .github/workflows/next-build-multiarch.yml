@@ -66,7 +66,8 @@ jobs:
           tags: ${{ env.IMAGE }}:${{ matrix.arch }}-sealights
           build-args: |
             SL_TOKEN=${{ secrets.SL_TOKEN }}
-            SL_BUILD_NAME=${{ env.SHORT_SHA }}-${{ matrix.arch }}
+            SL_BUILD_ID=che-dashboard-${{ matrix.arch }}
+            SL_BUILD_NAME=${{ env.SHORT_SHA }}
       -
         id: result
         name: "Build result outputs version"
