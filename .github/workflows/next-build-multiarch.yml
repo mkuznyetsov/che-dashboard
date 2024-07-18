@@ -29,10 +29,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        arch: [amd64,arm64]
+        arch: [amd64]
     outputs:
       amd64: ${{ steps.result.outputs.amd64 }}
-      arm64: ${{ steps.result.outputs.arm64 }}
+      #arm64: ${{ steps.result.outputs.arm64 }}
     steps:
       -
         name: "Checkout Che Dashboard source code"
@@ -66,8 +66,8 @@ jobs:
           tags: ${{ env.IMAGE }}:${{ matrix.arch }}-sealights
           build-args: |
             SL_TOKEN=${{ secrets.SL_TOKEN }}
-            SL_BUILD_ID=che-dashboard-${{ matrix.arch }}
-            SL_BUILD_NAME=${{ env.SHORT_SHA }}
+            SL_BUILD_NAME=che-dashboard
+            SL_BUILD_ID=${{ env.SHORT_SHA }}
       -
         id: result
         name: "Build result outputs version"
