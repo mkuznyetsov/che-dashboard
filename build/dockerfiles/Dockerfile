@@ -47,7 +47,7 @@ RUN yarn build:dev
 
 # enable sealights agent to scan the project sources, and inject the code with
 
-ENV NODE_DEBUG=s1
+ENV NODE_DEBUG=sl
 
 RUN yarn add slnodejs -W && \
     yarn slnodejs config --token ${SL_TOKEN} --appname ${SL_BUILD_NAME} --branch "main" --build ${SL_BUILD_ID} && \
@@ -73,7 +73,7 @@ ENV DEVFILE_REGISTRY=/dashboard/packages/devfile-registry
 
 
 COPY --from=builder ${BACKEND_LIB} /backend
-COPY --from=builder /dashboard/buildSessionId /buildSessionId
+#COPY --from=builder /dashboard/buildSessionId /buildSessionId
 COPY --from=builder ${BACKEND_NODE_MODULES} /backend/node_modules
 COPY --from=builder ${FRONTEND_LIB} /public
 COPY --from=builder ${DEVFILE_REGISTRY} /public/dashboard/devfile-registry
