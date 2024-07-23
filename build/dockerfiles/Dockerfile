@@ -64,6 +64,9 @@ RUN yarn workspace @eclipse-che/dashboard-backend install --production
 
 FROM docker.io/node:18.19.1-alpine3.19
 
+ARG SL_TOKEN=''
+ENV SL_TOKEN=$SL_TOKEN
+
 RUN apk --no-cache add curl
 
 ENV FRONTEND_LIB=/dashboard/packages/dashboard-frontend/lib/public
@@ -71,7 +74,7 @@ ENV BACKEND_LIB=/dashboard/packages/dashboard-backend/lib
 ENV BACKEND_NODE_MODULES=/dashboard/packages/dashboard-backend/node_modules/
 ENV DEVFILE_REGISTRY=/dashboard/packages/devfile-registry
 
-WORKDIR sealights/
+WORKDIR /sealights
 
 RUN npm install --loglevel=error slnodejs
 
