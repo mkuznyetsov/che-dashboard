@@ -71,6 +71,8 @@ ENV BACKEND_LIB=/dashboard/packages/dashboard-backend/lib
 ENV BACKEND_NODE_MODULES=/dashboard/packages/dashboard-backend/node_modules/
 ENV DEVFILE_REGISTRY=/dashboard/packages/devfile-registry
 
+WORKDIR sealights/
+
 RUN npm install --loglevel=error slnodejs
 
 COPY --from=builder ${BACKEND_LIB} /backend
