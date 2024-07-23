@@ -73,7 +73,7 @@ ENV DEVFILE_REGISTRY=/dashboard/packages/devfile-registry
 
 
 COPY --from=builder ${BACKEND_LIB} /backend
-#COPY --from=builder /dashboard/buildSessionId /buildSessionId
+COPY --from=builder /dashboard/buildSessionId /buildSessionId
 COPY --from=builder ${BACKEND_NODE_MODULES} /backend/node_modules
 COPY --from=builder ${FRONTEND_LIB} /public
 COPY --from=builder ${DEVFILE_REGISTRY} /public/dashboard/devfile-registry

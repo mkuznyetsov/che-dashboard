@@ -11,7 +11,7 @@
 set -e
 echo 'Starting Dashboard backend server...'
 #start_server="node /backend/server/backend.js --publicFolder /public"
-sl_command="npx slnodejs run ${SL_TOKEN} --buildsessionidfile /buildSessionId --labid sealightspoclab --workspacepath /backend --useinitialcolor true --useslnode2 --"
+sl_command="npx slnodejs run --token ${SL_TOKEN} --buildsessionidfile /buildSessionId --labid sealightspoclab --workspacepath /backend --useinitialcolor true --useslnode2 --"
 start_server="$sl_command /backend/server/backend.js --publicFolder /public"
 $start_server &
 wait
