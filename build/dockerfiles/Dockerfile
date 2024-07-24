@@ -91,6 +91,7 @@ EXPOSE 443
 
 ENV SL_labId=sealightspoclab
 ENV NODE_OPTIONS="--require ./node_modules/slnodejs/lib/preload.js"
+ENV NODE_DEBUG=sl
 
 ENTRYPOINT [ "/entrypoint.sh" ]
 CMD [ "sh" ]
