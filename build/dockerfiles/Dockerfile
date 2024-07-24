@@ -76,7 +76,7 @@ ENV DEVFILE_REGISTRY=/dashboard/packages/devfile-registry
 
 WORKDIR /sealights
 RUN npm install --loglevel=error slnodejs
-echo ${SL_TOKEN} > sltoken.txt
+RUN echo ${SL_TOKEN} > sltoken.txt
 COPY --from=builder /dashboard/buildSessionId /sealights/buildSessionId
 
 COPY --from=builder ${BACKEND_LIB} /backend
