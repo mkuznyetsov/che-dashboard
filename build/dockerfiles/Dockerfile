@@ -12,11 +12,11 @@ FROM docker.io/node:18.19.1-alpine3.19 as builder
 ARG SL_TOKEN=''
 ENV SL_TOKEN=$SL_TOKEN
 
+ARG SL_APP_NAME=''
+ENV SL_APP_NAME=$SL_APP_NAME
+
 ARG SL_BUILD_NAME=''
 ENV SL_BUILD_NAME=$SL_BUILD_NAME
-
-ARG SL_BUILD_ID=''
-ENV SL_BUILD_ID=$SL_BUILD_ID
 
 # hadolint ignore=DL3018
 RUN apk add --no-cache python3 make g++
@@ -50,8 +50,8 @@ RUN yarn build:dev
 ENV NODE_DEBUG=sl
 
 RUN yarn add slnodejs -W && \
-    yarn slnodejs config --token ${SL_TOKEN} --appname ${SL_BUILD_NAME} --branch "main" --build ${SL_BUILD_ID} && \
-    yarn slnodejs scan --token ${SL_TOKEN} --buildsessionidfile buildSessionId --instrumentForBrowsers --workspacepath /dashboard/${FRONTEND}/lib --outputpath /dashboard/${FRONTEND}/sl_lib --scm none --uniqueModuleId frontend-package --labid sealightspoclab && \
+    yarn slnodejs config --token ${SL_TOKEN} --appname ${SL_APP_NAME} --branch "main" --build ${SL_BUILD_NAME} && \
+    yarn slnodejs scan --token ${SL_TOKEN} --buildsessionidfile buildSessionId --instrumentForBrowsers --workspacepath /dashboard/${FRONTEND}/lib --outputpath /dashboard/${FRONTEND}/sl_lib --scm none --uniqueModuleId frontend-package --labid "${SL_APP_NAME}-${SL_BUILD_NAME}" && \
     yarn slnodejs scan --token ${SL_TOKEN} --buildsessionidfile buildSessionId --workspacepath /dashboard/${BACKEND}/lib --outputpath /dashboard/${BACKEND}/sl_lib --scm none --uniqueModuleId backend-package && \
     yarn slnodejs scan --token ${SL_TOKEN} --buildsessionidfile buildSessionId --workspacepath /dashboard/${COMMON}/lib --outputpath /dashboard/${COMMON}/sl_lib --scm none --uniqueModuleId common-package && \
     yarn slnodejs buildend --token ${SL_TOKEN} --buildsessionidfile buildSessionId --ok
@@ -66,6 +66,9 @@ FROM docker.io/node:18.19.1-alpine3.19
 
 ARG SL_TOKEN=''
 ENV SL_TOKEN=$SL_TOKEN
+
+ARG SL_APP_NAME=''
+ENV SL_APP_NAME=$SL_BUILD_NAME
 
 RUN apk --no-cache add curl
 
@@ -89,7 +92,7 @@ COPY build/dockerfiles/entrypoint.sh /entrypoint.sh
 EXPOSE 80
 EXPOSE 443
 
-ENV SL_labId=sealightspoclab
+ENV SL_labId="${SL_APP_NAME}-${SL_BUILD_NAME}"
 ENV NODE_OPTIONS="--require ./node_modules/slnodejs/lib/preload.js"
 ENV NODE_DEBUG=sl
 
