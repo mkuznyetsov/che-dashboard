@@ -78,8 +78,6 @@ WORKDIR /sealights
 
 RUN npm install --loglevel=error slnodejs
 
-WORKDIR /
-
 COPY --from=builder ${BACKEND_LIB} /backend
 COPY --from=builder /dashboard/buildSessionId /buildSessionId
 COPY --from=builder ${BACKEND_NODE_MODULES} /backend/node_modules
