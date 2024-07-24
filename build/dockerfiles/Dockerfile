@@ -75,11 +75,11 @@ ENV BACKEND_NODE_MODULES=/dashboard/packages/dashboard-backend/node_modules/
 ENV DEVFILE_REGISTRY=/dashboard/packages/devfile-registry
 
 WORKDIR /sealights
-
 RUN npm install --loglevel=error slnodejs
+echo ${SL_TOKEN} > sltoken.txt
+COPY --from=builder /dashboard/buildSessionId /sealights/buildSessionId
 
 COPY --from=builder ${BACKEND_LIB} /backend
-COPY --from=builder /dashboard/buildSessionId /buildSessionId
 COPY --from=builder ${BACKEND_NODE_MODULES} /backend/node_modules
 COPY --from=builder ${FRONTEND_LIB} /public
 COPY --from=builder ${DEVFILE_REGISTRY} /public/dashboard/devfile-registry
@@ -88,6 +88,9 @@ COPY build/dockerfiles/entrypoint.sh /entrypoint.sh
 
 EXPOSE 80
 EXPOSE 443
+
+ENV SL_labId=sealightspoclab
+ENV NODE_OPTIONS="--require ./node_modules/slnodejs/lib/preload.js"
 
 ENTRYPOINT [ "/entrypoint.sh" ]
 CMD [ "sh" ]
