@@ -98,6 +98,7 @@ EXPOSE 443
 ENV SL_labId=${SL_APP_NAME}-${SL_BUILD_NAME}
 ENV NODE_OPTIONS="--require ./node_modules/slnodejs/lib/preload.js"
 ENV NODE_DEBUG=sl
+ENV SL_LOG_LEVEL=debug
 
 ENTRYPOINT [ "/entrypoint.sh" ]
 CMD [ "sh" ]
