@@ -52,8 +52,8 @@ ENV NODE_DEBUG=sl
 RUN yarn add slnodejs -W && \
     yarn slnodejs config --token ${SL_TOKEN} --appname ${SL_APP_NAME} --branch "main" --build ${SL_BUILD_NAME} && \
     yarn slnodejs scan --token ${SL_TOKEN} --buildsessionidfile buildSessionId --instrumentForBrowsers --workspacepath /dashboard/${FRONTEND}/lib --outputpath /dashboard/${FRONTEND}/sl_lib --scm none --uniqueModuleId frontend-package --labid ${SL_APP_NAME}-${SL_BUILD_NAME} && \
-    yarn slnodejs scan --token ${SL_TOKEN} --buildsessionidfile buildSessionId --workspacepath /dashboard/${BACKEND}/lib --outputpath /dashboard/${BACKEND}/sl_lib --scm none --uniqueModuleId backend-package && \
-    yarn slnodejs scan --token ${SL_TOKEN} --buildsessionidfile buildSessionId --workspacepath /dashboard/${COMMON}/lib --outputpath /dashboard/${COMMON}/sl_lib --scm none --uniqueModuleId common-package && \
+    yarn slnodejs scan --token ${SL_TOKEN} --buildsessionidfile buildSessionId --workspacepath /dashboard/${BACKEND}/lib --scm none --uniqueModuleId backend-package --projectRoot packages && \
+    #yarn slnodejs scan --token ${SL_TOKEN} --buildsessionidfile buildSessionId --workspacepath /dashboard/${COMMON}/lib --scm none --uniqueModuleId common-package && \
     yarn slnodejs buildend --token ${SL_TOKEN} --buildsessionidfile buildSessionId --ok
 
 RUN mv /dashboard/${FRONTEND}/lib /dashboard/${FRONTEND}/lib_original && \
@@ -91,12 +91,14 @@ COPY --from=builder ${FRONTEND_LIB} /public
 COPY --from=builder ${DEVFILE_REGISTRY} /public/dashboard/devfile-registry
 
 COPY build/dockerfiles/entrypoint.sh /entrypoint.sh
+COPY build/dockerfiles/slpoc_preload.js /slpoc_preload.js
 
 EXPOSE 80
 EXPOSE 443
 
 ENV SL_labId=${SL_APP_NAME}-${SL_BUILD_NAME}
-ENV NODE_OPTIONS="--require ./node_modules/slnodejs/lib/preload.js"
+ENV SL_projectRoot="lib/server/@eclipse-che"
+ENV NODE_OPTIONS="--require /slpoc_preload.js"
 ENV NODE_DEBUG=sl
 ENV SL_LOG_LEVEL=debug
 
