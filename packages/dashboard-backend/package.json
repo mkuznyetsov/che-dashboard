@@ -49,6 +49,7 @@
     "pino-pretty": "^10.2.0",
     "querystring": "^0.2.1",
     "reflect-metadata": "^0.1.14",
+    "slnodejs": "^6.1.853",
     "ws": "^8.17.0"
   },
   "devDependencies": {

@@ -86,7 +86,6 @@ COPY --from=builder ${FRONTEND_LIB} /public
 COPY --from=builder ${DEVFILE_REGISTRY} /public/dashboard/devfile-registry
 
 WORKDIR /backend
-RUN npm install --loglevel=error slnodejs
 RUN echo ${SL_TOKEN} > sltoken.txt
 COPY --from=builder /dashboard/buildSessionId /backend/buildSessionId
 
