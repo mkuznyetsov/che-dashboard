@@ -90,7 +90,6 @@ RUN npm install --loglevel=error slnodejs
 RUN echo ${SL_TOKEN} > sltoken.txt
 COPY --from=builder /dashboard/buildSessionId /backend/buildSessionId
 
-
 COPY build/dockerfiles/entrypoint.sh /entrypoint.sh
 COPY build/dockerfiles/slpoc_preload.js /slpoc_preload.js
 
@@ -103,5 +102,5 @@ ENV NODE_OPTIONS="--require /slpoc_preload.js"
 ENV NODE_DEBUG=sl
 ENV SL_LOG_LEVEL=debug
 
-ENTRYPOINT [ "/entbackendrypoint.sh" ]
+ENTRYPOINT [ "/entrypoint.sh" ]
 CMD [ "sh" ]
