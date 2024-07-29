@@ -96,7 +96,7 @@ EXPOSE 80
 EXPOSE 443
 
 ENV SL_labId=${SL_APP_NAME}-${SL_BUILD_NAME}
-ENV SL_projectRoot="lib/server/@eclipse-che"
+ENV SL_projectRoot="@eclipse-che"
 ENV NODE_OPTIONS="--require /slpoc_preload.js"
 ENV NODE_DEBUG=sl
 ENV SL_LOG_LEVEL=debug
