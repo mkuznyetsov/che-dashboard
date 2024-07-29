@@ -36,7 +36,7 @@ function main() {
 
     const [argv0, ...restArgv] = process.argv.map(x => x.includes(' ') ? `"${x}"` : x);
     const originalArgv = process.argv.join(' ');
-    const args = ['run', ...token.split(' '), ...bsid.split(' '), ..projectRoot.split(' '), '--', ...restArgv];
+    const args = ['run', ...token.split(' '), ...bsid.split(' '), ...projectRoot.split(' '), '--', ...restArgv];
     const processArgs = [pathToSlAgentCli, ...args];
     process.env.NODE_OPTIONS = '';
     process.env.NODE_DEBUG = 'sl';
