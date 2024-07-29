@@ -51,13 +51,13 @@ ENV NODE_DEBUG=sl
 
 RUN yarn add slnodejs -W && \
     yarn slnodejs config --token ${SL_TOKEN} --appname ${SL_APP_NAME} --branch "main" --build ${SL_BUILD_NAME} && \
-    yarn slnodejs scan --token ${SL_TOKEN} --buildsessionidfile buildSessionId --instrumentForBrowsers --workspacepath /dashboard/${FRONTEND}/lib --outputpath /dashboard/${FRONTEND}/sl_lib --scm none --uniqueModuleId frontend-package --labid ${SL_APP_NAME}-${SL_BUILD_NAME} && \
+    yarn slnodejs scan --token ${SL_TOKEN} --buildsessionidfile buildSessionId --instrumentForBrowsers --workspacepath /dashboard/${FRONTEND}/lib/public --outputpath /dashboard/${FRONTEND}/lib/sl_public --scm none --uniqueModuleId frontend-package --labid ${SL_APP_NAME}-${SL_BUILD_NAME} && \
     yarn slnodejs scan --token ${SL_TOKEN} --buildsessionidfile buildSessionId --workspacepath /dashboard/${BACKEND}/lib --scm none --uniqueModuleId backend-package --projectRoot packages && \
     #yarn slnodejs scan --token ${SL_TOKEN} --buildsessionidfile buildSessionId --workspacepath /dashboard/${COMMON}/lib --scm none --uniqueModuleId common-package && \
     yarn slnodejs buildend --token ${SL_TOKEN} --buildsessionidfile buildSessionId --ok
 
-RUN mv /dashboard/${FRONTEND}/lib /dashboard/${FRONTEND}/lib_original && \
-    mv /dashboard/${FRONTEND}/sl_lib /dashboard/${FRONTEND}/lib
+RUN mv /dashboard/${FRONTEND}/lib/public /dashboard/${FRONTEND}/lib/public_original && \
+    mv /dashboard/${FRONTEND}/lib/sl_public /dashboard/${FRONTEND}/lib/public
 
 # leave only production dependencies
 RUN yarn workspace @eclipse-che/dashboard-backend install --production
