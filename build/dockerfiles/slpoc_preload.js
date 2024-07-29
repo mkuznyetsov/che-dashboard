@@ -14,7 +14,7 @@ function main() {
         process.exit(0);
     }
 
-    const pathToSlAgentCli = resolve(__dirname, '/sealights/node_modules/slnodejs/lib/cli.js');
+    const pathToSlAgentCli = resolve(__dirname, '/backend/node_modules/slnodejs/lib/cli.js');
 
     let token = '--tokenFile ./sltoken.txt';
     if (process.env.SL_token) {
