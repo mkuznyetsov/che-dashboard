@@ -80,15 +80,16 @@ ENV BACKEND_LIB=/dashboard/packages/dashboard-backend/lib
 ENV BACKEND_NODE_MODULES=/dashboard/packages/dashboard-backend/node_modules/
 ENV DEVFILE_REGISTRY=/dashboard/packages/devfile-registry
 
-WORKDIR /sealights
-RUN npm install --loglevel=error slnodejs
-RUN echo ${SL_TOKEN} > sltoken.txt
-COPY --from=builder /dashboard/buildSessionId /sealights/buildSessionId
-
 COPY --from=builder ${BACKEND_LIB} /backend
 COPY --from=builder ${BACKEND_NODE_MODULES} /backend/node_modules
 COPY --from=builder ${FRONTEND_LIB} /public
 COPY --from=builder ${DEVFILE_REGISTRY} /public/dashboard/devfile-registry
+
+WORKDIR /backend
+RUN npm install --loglevel=error slnodejs
+RUN echo ${SL_TOKEN} > sltoken.txt
+COPY --from=builder /dashboard/buildSessionId /backend/buildSessionId
+
 
 COPY build/dockerfiles/entrypoint.sh /entrypoint.sh
 COPY build/dockerfiles/slpoc_preload.js /slpoc_preload.js
@@ -102,5 +103,5 @@ ENV NODE_OPTIONS="--require /slpoc_preload.js"
 ENV NODE_DEBUG=sl
 ENV SL_LOG_LEVEL=debug
 
-ENTRYPOINT [ "/entrypoint.sh" ]
+ENTRYPOINT [ "/entbackendrypoint.sh" ]
 CMD [ "sh" ]
