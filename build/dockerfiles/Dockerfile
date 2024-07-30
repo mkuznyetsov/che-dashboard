@@ -27,7 +27,7 @@ RUN if ! [ type "yarn" &> /dev/null ]; then \
     fi
 
 # git repository needed for sealights scm scan
-COPY .git /dashboard/.git
+COPY .git/ /dashboard/.git/
 
 COPY package.json /dashboard/
 COPY yarn.lock /dashboard/
