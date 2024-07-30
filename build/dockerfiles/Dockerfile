@@ -19,7 +19,7 @@ ARG SL_BUILD_NAME=''
 ENV SL_BUILD_NAME=$SL_BUILD_NAME
 
 # hadolint ignore=DL3018
-RUN apk add --no-cache python3 make g++
+RUN apk add --no-cache python3 make git g++
 
 # hadolint ignore=DL3059,SC1072
 RUN if ! [ type "yarn" &> /dev/null ]; then \
