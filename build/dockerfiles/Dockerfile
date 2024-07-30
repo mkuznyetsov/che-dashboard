@@ -26,6 +26,9 @@ RUN if ! [ type "yarn" &> /dev/null ]; then \
         apk add yarn --no-cache; \
     fi
 
+# git repository needed for sealights scm scan
+COPY .git /dashboard/.git
+
 COPY package.json /dashboard/
 COPY yarn.lock /dashboard/
 COPY lerna.json /dashboard/
@@ -51,9 +54,9 @@ ENV NODE_DEBUG=sl
 
 RUN yarn add slnodejs -W && \
     yarn slnodejs config --token ${SL_TOKEN} --appname ${SL_APP_NAME} --branch "main" --build ${SL_BUILD_NAME} && \
-    yarn slnodejs scan --token ${SL_TOKEN} --buildsessionidfile buildSessionId --instrumentForBrowsers --workspacepath /dashboard/${FRONTEND}/lib/public --outputpath /dashboard/${FRONTEND}/lib/sl_public --scm none --uniqueModuleId frontend-package --labid ${SL_APP_NAME}-${SL_BUILD_NAME} && \
-    yarn slnodejs scan --token ${SL_TOKEN} --buildsessionidfile buildSessionId --workspacepath /dashboard/${BACKEND}/lib --scm none --uniqueModuleId backend-package --projectRoot packages && \
-    #yarn slnodejs scan --token ${SL_TOKEN} --buildsessionidfile buildSessionId --workspacepath /dashboard/${COMMON}/lib --scm none --uniqueModuleId common-package && \
+    yarn slnodejs scan --token ${SL_TOKEN} --buildsessionidfile buildSessionId --instrumentForBrowsers --workspacepath /dashboard/${FRONTEND}/lib/public --outputpath /dashboard/${FRONTEND}/lib/sl_public --scm git --uniqueModuleId frontend-package --labid ${SL_APP_NAME}-${SL_BUILD_NAME} && \
+    yarn slnodejs scan --token ${SL_TOKEN} --buildsessionidfile buildSessionId --workspacepath /dashboard/${BACKEND}/lib --scm git --uniqueModuleId backend-package --projectRoot packages && \
+    #yarn slnodejs scan --token ${SL_TOKEN} --buildsessionidfile buildSessionId --workspacepath /dashboard/${COMMON}/lib --scm git --uniqueModuleId common-package && \
     yarn slnodejs buildend --token ${SL_TOKEN} --buildsessionidfile buildSessionId --ok
 
 RUN mv /dashboard/${FRONTEND}/lib/public /dashboard/${FRONTEND}/lib/public_original && \
