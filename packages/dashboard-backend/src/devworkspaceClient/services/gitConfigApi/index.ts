@@ -39,7 +39,7 @@ export class GitConfigApiService implements IGitConfigApi {
     try {
       const response = await this.coreV1API.readNamespacedConfigMap(GITCONFIG_CONFIGMAP, namespace);
 
-      console.log('>>>>>>>>>>>>>>>>>>> read()')
+      console.log('>>>>>>>>>>>>>>>>>>> read()');
 
       return this.toGitConfig(response.body);
     } catch (error) {
