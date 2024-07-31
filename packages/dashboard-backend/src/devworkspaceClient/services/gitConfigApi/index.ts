@@ -41,7 +41,7 @@ export class GitConfigApiService implements IGitConfigApi {
 
       return this.toGitConfig(response.body);
     } catch (error) {
-      const message = `Unable to read gitconfig in the namespace "${namespace}"`;
+      const message = `NEW MESSAGE: Unable to read gitconfig in the namespace "${namespace}"`;
       throw createError(error, GITCONFIG_API_ERROR_LABEL, message);
     }
   }

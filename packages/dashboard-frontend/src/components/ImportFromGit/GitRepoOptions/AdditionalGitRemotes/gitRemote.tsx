@@ -155,7 +155,7 @@ class AdditionalGitRemote extends React.PureComponent<Props, State> {
       );
     }
 
-    return 'The URL or SSHLocation is not valid.';
+    return 'NEW MESSAGE: The URL or SSHLocation is not valid.';
   }
 
   private openUserPreferences(): void {
