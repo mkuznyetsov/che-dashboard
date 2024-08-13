@@ -37,7 +37,7 @@ export class GitConfigApiService implements IGitConfigApi {
    */
   public async read(namespace: string): Promise<api.IGitConfig> {
     try {
-      console.log('>>>>>>>>>>>>>>>>>>> session 4: read()');
+      console.log('>>>>>>>>>>>>>>>>>>> session 5: read()');
 
       const response = await this.coreV1API.readNamespacedConfigMap(GITCONFIG_CONFIGMAP, namespace);
 
