@@ -143,7 +143,7 @@ class AdditionalGitRemote extends React.PureComponent<Props, State> {
   private getErrorMessage(location: string): string | React.ReactNode {
     const isValidGitSsh = FactoryLocationAdapter.isSshLocation(location);
 
-    console.log('>>>>>>>>>>>>>>>>>>> session 5: getErrorMessage()');
+    console.log('>>>>>>>>>>>>>>>>>>> session 6: getErrorMessage()');
 
     if (isValidGitSsh && this.props.sshKeys.length === 0) {
       return (
